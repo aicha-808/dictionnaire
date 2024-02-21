@@ -55,7 +55,7 @@ export const Dictionnaire = () => {
                         <SearchWord words={item.word} onClick={() => playAudio()} titre1="Nature:"
                             nature={item.meanings[0].partOfSpeech} titre2="Definition:" 
                             def={item.meanings[0].definitions[0].definition} titre3="Synonym:" titre4="Example:"
-                            syno={item.meanings[1].synonyms[3]} example={item.example} />
+                            syno={item.meanings[1].synonyms[3].synonyms} example={item.example} />
                     </div>
                      )
                 }
