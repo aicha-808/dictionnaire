@@ -7,8 +7,8 @@ import axios from 'axios'
 
 export const Dictionnaire = () => {
      //state
-     const [data, setData] = useState("");
-     const [searchMot, setSearchMot] = useState('');
+     const [data, setData] = useState([]);
+     const [searchMot, setSearchMot] = useState("");
      
      //comportements
      const recherche = (newVal) => {
@@ -23,8 +23,8 @@ export const Dictionnaire = () => {
             axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en_US/${searchMot}`)
 
             .then(response => {
-                setData(response.data[0])
-                console.log(response.data[0]);
+                setData(response.data)
+                console.log(response.data);
             })
             .catch(error => {
                 console.error(error);
@@ -33,7 +33,7 @@ export const Dictionnaire = () => {
 
         // phonetics du mot a chercher
         function playAudio() {
-            let audio = new Audio(data.phonetics[0].audio);
+            let audio = new Audio(data.phonetics[1].audio);
             audio.play();
         }
  
@@ -43,19 +43,21 @@ export const Dictionnaire = () => {
                 <div className="col-sm-6 mx-auto bg-primary">
                     <FormRecherche onChange={recherche} value={searchMot} onClick={valideSearch} 
                     motRech={searchMot} phonetic={ data &&
-                        data.phonetics[1].text }  />   
+                        data.phonetics }  />   
                 </div> 
             </div>
             <div className="row mt-3">
                 <div className="col-sm-6 mx-auto ">
                 {
                     data &&
-                        <div>
-                            <SearchWord words={data.word} onClick={() => playAudio()} titre1="Nature:"
-                                nature={data.meanings[0].partOfSpeech} titre2="Definition:" 
-                                def={data.meanings[0].definitions[0].definition} titre3="Synonym:" titre4="Example:"
-                                syno={data.meanings[1].synonyms[1]} example={data.meanings[1].definitions[1].example} />
-                        </div>
+                     data.map((item, index) =>
+                     <div key={index}>
+                        <SearchWord words={item.word} onClick={() => playAudio()} titre1="Nature:"
+                            nature={item.meanings[0].partOfSpeech} titre2="Definition:" 
+                            def={item.meanings[0].definitions[0].definition} titre3="Synonym:" titre4="Example:"
+                            syno={item.meanings[1].synonyms[3]} example={item.example} />
+                    </div>
+                     )
                 }
                 </div>
             </div>
